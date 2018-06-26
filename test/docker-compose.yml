@@ -1,0 +1,14 @@
+version: "2"
+services:
+
+  db:
+    image: openlmis/postgres:9.6
+    env_file: settings.env
+
+  migration-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on: [db]
+    env_file: settings.env
+
