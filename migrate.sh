@@ -12,10 +12,10 @@ echo "Read user contact details (the reference data database)"
 ${PSQL} -c "SELECT id, email, phoneNumber, verified, allowNotify FROM referencedata.users" > user_contact_details.csv
 
 echo "Create SQL statements"
-echo "TRUNCATE TABLE notification.user_contact_details;" >> migration.sql
+echo "TRUNCATE TABLE notification.user_contact_details CASCADE;" >> migration.sql
 
 while IFS=, read -r id email phone verified notify ; do
-  echo "INSERT INTO notification.user_contact_details(referenceDataUserId, phoneNumber, allowNotify, email, emailVerified) VALUES ('${id}', '${phone}', ${notify}, '${email}', ${verified}) ;" >> migration.sql
+  echo "INSERT INTO notification.user_contact_details(referenceDataUserId, phoneNumber, allowNotify, email, emailVerified) VALUES ('${id}', '${phone}', '${notify}', '${email}', '${verified}') ;" >> migration.sql
 done < user_contact_details.csv
 
 echo "Apply migration (the notification database)"

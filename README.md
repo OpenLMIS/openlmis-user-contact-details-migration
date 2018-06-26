@@ -41,7 +41,7 @@ That's it - the migration will run and give you output about its progress.
 The Docker image is built on Docker Hub. In order to build it locally, simply run:
 
 ```bash
-docker build -t openlmis/user-contact-details-migration
+docker build -t openlmis/user-contact-details-migration .
 ```
 
 ## Script details
