@@ -14,12 +14,12 @@ It is **strongly** suggested to run the migration on a staging/test server with 
 
 Pre-planning: Schedule downtime to perform the upgrade; do the upgrade on a Test/Staging server in advance before Production.
 
-1. Bring server offline (so no more edits to data will be accepted from users). Stop the OpenLMIS services (docker-compose down).
+1. Bring server offline (so no more edits to data will be accepted from users). Stop the OpenLMIS services (docker-compose down). Make sure that the PostgreSQL is up and running.
 2. Take full database backup. (And make sure you have a backup of the code/services deployed as well so you could roll back if necessary.)
-3. Upgrade to OpenLMIS 3.4 components (usual steps to change versions of components used in your ref-distro docker-compose.yml).
-4. Start the server to run OpenLMIS and apply components migrations (docker-compose up).
-5. After successful start bring server offline one more time (wait about 5 min to ensure that all migrations were applied).
-6. Run the migration script. See section below for details.
+3. Upgrade components to the latest release version (usual steps to change versions of components used in your ref-distro docker-compose.yml).
+4. Start the server to run OpenLMIS and apply components schema migrations (docker-compose up).
+5. After successful start, stop the OpenLMIS services one more time (wait until all schema migrations were applied, you can verify that by checking logs or executing GET /api/health endpoint).
+6. Run the cross-service migration script. See section below for details.
 7. Start the server to run OpenLMIS again (docker-compose up).
 8. Run some manual tests to ensure the system is in good health (try viewing a user profile, check if user with manage users right has ability to add or edit user details).
 9. Bring server online (begin accepting outside traffic from users again).
