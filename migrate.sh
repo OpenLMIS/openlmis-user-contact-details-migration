@@ -15,7 +15,15 @@ echo "Create SQL statements"
 echo "TRUNCATE TABLE notification.user_contact_details CASCADE;" >> migration.sql
 
 while IFS=, read -r id email phone verified notify ; do
-  echo "INSERT INTO notification.user_contact_details(referenceDataUserId, phoneNumber, allowNotify, email, emailVerified) VALUES ('${id}', '${phone}', '${notify}', '${email}', '${verified}') ;" >> migration.sql
+  if [ -n "${email##+([[:space:]])}" ]; then
+      emailAddress="'${email}'"
+      emailVerified="'${verified}'"
+  else
+      emailAddress="NULL"
+      emailVerified="NULL"
+  fi
+
+  echo "INSERT INTO notification.user_contact_details(referenceDataUserId, phoneNumber, allowNotify, email, emailVerified) VALUES ('${id}', '${phone}', '${notify}', ${emailAddress}, ${emailVerified}) ;" >> migration.sql
 done < user_contact_details.csv
 
 echo "Apply migration (the notification database)"
